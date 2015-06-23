@@ -273,6 +273,8 @@ div#wrapper{
 }
 div#wrapper div.content{
 	position: relative;
+}
+div#wrapper #body div.content{
 	min-height: 200px;
 }
 

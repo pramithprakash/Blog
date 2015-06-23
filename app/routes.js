@@ -1,12 +1,20 @@
-var Blog = require('./models/blog');
+var mongojs = require('mongojs'); 					// mongojs for mongodb
+var database = require('../config/database'); 			// load the database config
+var ObjectId = mongojs.ObjectId;
+var db = mongojs(database.url);
+var Blog = db.collection('Blogs');
+
+Blog.createIndex( { orderDate: -1 } )
+
 
 function getBlogs(res){
+
 	Blog.find(function(err, blogs) {
 
 			// if there is an error retrieving, send the error. nothing after res.send(err) will execute
 			if (err)
 				res.send(err)
-
+			blogs = blogs.reverse()
 			res.json(blogs); // return all blogs in JSON format
 		});
 };
@@ -25,9 +33,10 @@ module.exports = function(app) {
 	app.post('/api/blogs', function(req, res) {
 
 		// create a blog, information comes from AJAX request from Angular
-		Blog.create({
+		Blog.insert({
 			title : req.body.title,
-			description : req.body.description
+			description : req.body.description,
+			date : req.body.date
 		}, function(err, blog) {
 			if (err)
 				res.send(err);
@@ -41,7 +50,7 @@ module.exports = function(app) {
 	// delete a todo
 	app.delete('/api/blogs/:blog_id', function(req, res) {
 		Blog.remove({
-			_id : req.params.blog_id
+			_id : ObjectId(req.params.blog_id),
 		}, function(err, blog) {
 			if (err)
 				res.send(err);

@@ -6,6 +6,8 @@ angular.module('blogController', [])
 		$scope.blogData = {};
 		$scope.loading = true;
 		$scope.limit = 3;
+		var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+		var months =  ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		// GET =====================================================================
 		// when landing on the page, get all blogs and show them
 		// use the service to get all the blogs
@@ -20,6 +22,10 @@ angular.module('blogController', [])
 					return;
 				}
 				$scope.loading = true;
+				var date = new Date();
+
+				$scope.blogData['date'] = days[date.getDay()] + ', ' + months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear() + ' (' + date.getHours() + ':' + date.getMinutes() + ')';
+				
 				// call the create function from our service (returns a promise object)
 				Blogs.create($scope.blogData)
 
