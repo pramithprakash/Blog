@@ -3,7 +3,9 @@ var database = require('../config/database'); 			// load the database config
 var ObjectId = mongojs.ObjectId;
 var db = mongojs(database.url);
 var Blog = db.collection('Blogs');
-
+var showdown  = require('showdown'),
+    converter = new showdown.Converter();
+   
 Blog.createIndex( { orderDate: -1 } )
 
 
@@ -31,12 +33,17 @@ module.exports = function(app) {
 
 	// create blog and send back all blog after creation
 	app.post('/api/blogs', function(req, res) {
-
 		// create a blog, information comes from AJAX request from Angular
+		var tags = [];
+    	var html = converter.makeHtml(req.body.description);
+    	tags = req.body.tags;
+    	tags.push('ALL')
+
 		Blog.insert({
 			title : req.body.title,
-			description : req.body.description,
-			date : req.body.date
+			description : html,
+			date : req.body.date,
+			tags : tags 
 		}, function(err, blog) {
 			if (err)
 				res.send(err);

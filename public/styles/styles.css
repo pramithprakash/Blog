@@ -1085,3 +1085,7 @@ button{
         transform: perspective(100px) rotateX(0) rotateY(0);
     }
 }
+pre {
+	background: #444;
+	color: #fff;
+}

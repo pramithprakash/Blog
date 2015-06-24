@@ -1,1 +1,1 @@
-angular.module('pramithBlog', ['blogController', 'blogService']);
+angular.module('pramithBlog', ['ngSanitize','blogController', 'blogService']);
